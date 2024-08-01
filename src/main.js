@@ -113,6 +113,7 @@ k.scene("preloge", async () => {
       // Bewegung vertikal
       npc.play("walk-up-npc");
     }
+    npcDialogue(npc, player);
   }
 
   for (const layer of layers) {
@@ -125,6 +126,7 @@ k.scene("preloge", async () => {
           k.body({ isStatic: true }),
           k.pos(boundary.x, boundary.y),
           boundary.name,
+          console.log(boundary.name),
         ]);
 
         let isDialogueOpen = false;
@@ -164,7 +166,8 @@ k.scene("preloge", async () => {
           console.log(boundary);
           if (boundary.name) {
             player.isInDialogue = true;
-            player.currentBoundary = boundary; // Store the current boundary
+            player.currentBoundary = boundary;
+            console.log(player.currentBoundary); // Store the current boundary
           }
         });
       }
@@ -328,5 +331,24 @@ k.scene("preloge", async () => {
     k.camPos(player.pos.x, player.pos.y + 100);
   });
 });
+
+function npcDialogue(npc, player) {
+  if (npc.pos.x >= 287 && npc.pos.y >= npc.target.y) {
+    const dialogueUI = document.getElementById("textbox-container");
+    const dialogue = document.getElementById("dialogue");
+    const canvas = document.getElementById("game");
+    const closeBtn = document.getElementById("close");
+    dialogueUI.style.display = "block";
+    dialogue.innerText = dialogueData.NPCDialogue;
+    player.isInDialogue = true;
+
+    closeBtn.addEventListener("click", () => {
+      player.isInDialogue = false;
+      dialogueUI.style.display = "none";
+      dialogue.innerHTML = "";
+      canvas.focus();
+    });
+  }
+}
 
 k.go("preloge");
