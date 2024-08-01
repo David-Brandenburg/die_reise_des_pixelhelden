@@ -1,20 +1,28 @@
-export function displayDialogue(text, onDisplayEnd) {
+export function displayDialogue(text, header, onDisplayEnd) {
   const dialogueUI = document.getElementById("textbox-container");
+  const dialogueH1 = document.getElementById("name");
   const dialogue = document.getElementById("dialogue");
 
   dialogueUI.style.display = "block";
 
   let index = 0;
+  let currentHeader = "";
   let currentText = "";
   const intervalRef = setInterval(() => {
-    if (index < text.length) {
-      currentText += text[index];
+    if (index < header.length) {
+      currentHeader += header[index];
+      dialogueH1.innerText = currentHeader;
+      index++;
+      console.log("Header: " + currentHeader);
+    } else if (index - header.length < text.length) {
+      currentText += text[index - header.length];
       dialogue.innerText = currentText;
       index++;
-      return;
+      console.log("Text: " + currentText);
+    } else {
+      clearInterval(intervalRef);
+      console.log("Interval cleared.");
     }
-
-    clearInterval(intervalRef);
   }, 5);
 
   const closeBtn = document.getElementById("close");
@@ -22,6 +30,7 @@ export function displayDialogue(text, onDisplayEnd) {
   function onCloseBtnClick() {
     onDisplayEnd();
     dialogueUI.style.display = "none";
+    dialogueH1.innerHTML = "";
     dialogue.innerHTML = "";
     clearInterval(intervalRef);
     closeBtn.removeEventListener("click", onCloseBtnClick);

@@ -79,8 +79,7 @@ k.scene("preloge", async () => {
     // Berechnung der Richtung
     const direction = k.vec2(
       npc.target.x - npc.pos.x,
-      npc.target.y - npc.pos.y,
-      console.log(npc.target.x, npc.target.y, npc.pos.x, npc.pos.y)
+      npc.target.y - npc.pos.y
     );
     const length = Math.sqrt(
       direction.x * direction.x + direction.y * direction.y
@@ -151,10 +150,16 @@ k.scene("preloge", async () => {
             closeDialogue();
           } else if (player.isInDialogue && player.currentBoundary) {
             // If the player is in dialogue range and dialogue is not open, open it
-            displayDialogue(dialogueData[player.currentBoundary.name], () => {
-              closeDialogue();
-              console.log("Dialogue ended.");
-            });
+            displayDialogue(
+              dialogueData[player.currentBoundary.name],
+              dialogueData[player.currentH1],
+              () => {
+                console.log(dialogueData[player.currentBoundary.name]);
+                closeDialogue();
+                console.log("Dialogue ended.");
+              }
+            );
+
             isDialogueOpen = true;
             console.log("Dialogue opened.");
           } else {
@@ -163,10 +168,38 @@ k.scene("preloge", async () => {
         });
 
         player.onCollide("book", () => {
-          console.log(boundary);
-          if (boundary.name) {
+          if (boundary.name === "book") {
             player.isInDialogue = true;
             player.currentBoundary = boundary;
+            player.currentH1 = "bookH1";
+            console.log(player.currentBoundary);
+            // Store the current boundary
+          }
+        });
+
+        player.onCollide("bed", () => {
+          if (boundary.name === "bed") {
+            player.isInDialogue = true;
+            player.currentBoundary = boundary;
+            player.currentH1 = "bedH1";
+            console.log(player.currentBoundary); // Store the current boundary
+          }
+        });
+
+        player.onCollide("schrank", () => {
+          if (boundary.name === "schrank") {
+            player.isInDialogue = true;
+            player.currentBoundary = boundary;
+            player.currentH1 = "schrankH1";
+            console.log(player.currentBoundary); // Store the current boundary
+          }
+        });
+
+        player.onCollide("kiste", () => {
+          if (boundary.name === "kiste") {
+            player.isInDialogue = true;
+            player.currentBoundary = boundary;
+            player.currentH1 = "kisteH1";
             console.log(player.currentBoundary); // Store the current boundary
           }
         });
@@ -306,13 +339,14 @@ k.scene("preloge", async () => {
 
   function StartDialogue() {
     const dialogueUI = document.getElementById("textbox-container");
+    const dialogueH1 = document.getElementById("name");
     const dialogue = document.getElementById("dialogue");
     const canvas = document.getElementById("game");
     const closeBtn = document.getElementById("close");
     dialogueUI.style.display = "block";
+    dialogueH1.innerText = dialogueData.StartDialogeH1;
     dialogue.innerText = dialogueData.StartDialoge;
     player.isInDialogue = true;
-
     closeBtn.addEventListener("click", () => {
       player.isInDialogue = false;
       dialogueUI.style.display = "none";
@@ -335,10 +369,12 @@ k.scene("preloge", async () => {
 function npcDialogue(npc, player) {
   if (npc.pos.x >= 287 && npc.pos.y >= npc.target.y) {
     const dialogueUI = document.getElementById("textbox-container");
+    const dialogueH1 = document.getElementById("name");
     const dialogue = document.getElementById("dialogue");
     const canvas = document.getElementById("game");
     const closeBtn = document.getElementById("close");
     dialogueUI.style.display = "block";
+    dialogueH1.innerText = "Dorfälteste";
     dialogue.innerText = dialogueData.NPCDialogue;
     player.isInDialogue = true;
 

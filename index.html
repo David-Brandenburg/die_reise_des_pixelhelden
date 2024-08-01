@@ -41,6 +41,12 @@
         filter: drop-shadow(0 0 0.75rem rgb(112, 112, 112));
       }
 
+      .ui-text-header {
+        margin: 0;
+        user-select: none;
+        text-decoration: underline;
+      }
+
       .ui-text {
         margin: 0;
         user-select: none;
@@ -74,6 +80,7 @@
         <p class="note">Tap/click aroud to move</p>
         <div id="textbox-container" style="display: none">
           <div id="textbox">
+            <h3 id="name" class="ui-text-header"></h3>
             <p id="dialogue" class="ui-text"></p>
             <div class="btn-container">
               <button id="close" class="ui-close-btn">Close</button>
